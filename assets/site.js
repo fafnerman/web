@@ -186,7 +186,7 @@
       b.addEventListener('mouseenter', function () {
         if (!hover.matches) return;
         clearTimeout(hoverTimer);
-        hoverTimer = setTimeout(function () { open(b); }, 140);
+        hoverTimer = setTimeout(function () { open(b); }, 90);
       });
       b.addEventListener('mouseleave', function () { clearTimeout(hoverTimer); });
       b.addEventListener('click', function () { open(b); });

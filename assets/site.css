@@ -498,22 +498,22 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* Three fold-out blocks: the open one widens, draws a steel
    bar, and its diagram turns steel. Without JS all three show, fully open. */
-.probs { grid-column: 1 / -1; display: flex; gap: 16px; min-height: clamp(460px, 36vw, 600px); }
+.probs { grid-column: 1 / -1; display: flex; gap: 16px; min-height: clamp(520px, 360px + 15vw, 700px); }
 .prob {
   --prob-stroke: var(--color-neutral-600);
   --prob-ease: cubic-bezier(.45, 0, .2, 1);
   flex: 1 1 0; min-width: 0; border-color: var(--color-neutral-400);
-  transition: flex .8s var(--prob-ease), border-color .6s ease;
+  transition: flex .6s var(--prob-ease), border-color .4s ease;
 }
-.prob-bar { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--color-accent); transition: width .8s var(--prob-ease); }
+.prob-bar { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--color-accent); transition: width .6s var(--prob-ease); }
 .prob-inner { position: relative; height: 100%; padding: 28px; display: flex; flex-direction: column; }
-.prob-head { display: flex; justify-content: space-between; font: 500 11px/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--color-neutral-600); }
+.prob-head { display: flex; justify-content: flex-end; font: 500 11px/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--color-neutral-600); }
 .prob-sign { display: none; font-size: 16px; color: var(--color-text); }
 /* diagrams span the full block width, so the wider open block's diagram
    fills it and scales smoothly as blocks open and close */
 .prob-fig { margin-top: 24px; }
 .prob-fig svg { width: 100%; height: auto; }
-.prob-fig svg * { vector-effect: non-scaling-stroke; transition: stroke .6s ease, fill .6s ease; }
+.prob-fig svg * { vector-effect: non-scaling-stroke; transition: stroke .4s ease, fill .4s ease; }
 .prob-text { margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 12px; }
 .prob h3 { font-size: 36px; line-height: 1; text-wrap: balance; }
 .prob-toggle { text-align: left; cursor: pointer; }
@@ -529,8 +529,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .js .prob .prob-more {
   display: grid; grid-template-rows: 0fr; opacity: 0; overflow: hidden;
   margin-top: -12px; padding-top: 0; border-top-color: transparent;
-  transition: grid-template-rows .8s var(--prob-ease), margin-top .8s var(--prob-ease),
-              padding-top .8s var(--prob-ease), opacity .2s ease, border-top-color .2s ease;
+  transition: grid-template-rows .6s var(--prob-ease), margin-top .6s var(--prob-ease),
+              padding-top .6s var(--prob-ease), opacity .2s ease, border-top-color .2s ease;
 }
 /* Side by side, the text keeps a fixed width while the blocks resize, so it
    never rewraps mid-animation: titles and lines at the closed width, the
@@ -546,8 +546,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .js .prob.is-open .prob-more {
   grid-template-rows: 1fr; opacity: 1;
   margin-top: 0; padding-top: 16px; border-top-color: var(--color-neutral-300);
-  transition: grid-template-rows .8s var(--prob-ease), margin-top .8s var(--prob-ease),
-              padding-top .8s var(--prob-ease), opacity .5s ease .3s, border-top-color .5s ease .3s;
+  transition: grid-template-rows .6s var(--prob-ease), margin-top .6s var(--prob-ease),
+              padding-top .6s var(--prob-ease), opacity .4s ease .2s, border-top-color .4s ease .2s;
 }
 
 /* Technology */
@@ -566,8 +566,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 /* extra scroll between the second and third panel: the second stays pinned a little longer */
 /* extra scroll before the next panel arrives: DLLR-MARS-GK stays pinned longest */
-#uav-systems { margin-top: 70vh; }
-#advanced-guidance { margin-top: 40vh; }
+#uav-systems { margin-top: 25vh; }
+#advanced-guidance { margin-top: 15vh; }
 .offer-media { position: absolute; inset: 0; }
 .offer-media .frame { background: var(--color-accent-900); }
 .offer .duotone img { filter: grayscale(1) contrast(1.05) brightness(.6); }
