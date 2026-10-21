@@ -180,8 +180,15 @@
       });
     }
     var hover = window.matchMedia('(hover: hover) and (pointer: fine)');
+    var hoverTimer;
     blocks.forEach(function (b) {
-      b.addEventListener('mouseenter', function () { if (hover.matches) open(b); });
+      // short delay so a pointer just passing across doesn't flick blocks open
+      b.addEventListener('mouseenter', function () {
+        if (!hover.matches) return;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(function () { open(b); }, 140);
+      });
+      b.addEventListener('mouseleave', function () { clearTimeout(hoverTimer); });
       b.addEventListener('click', function () { open(b); });
       b.addEventListener('focusin', function () { open(b); });
     });

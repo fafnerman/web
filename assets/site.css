@@ -501,10 +501,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .probs { grid-column: 1 / -1; display: flex; gap: 16px; min-height: clamp(460px, 36vw, 600px); }
 .prob {
   --prob-stroke: var(--color-neutral-600);
+  --prob-ease: cubic-bezier(.45, 0, .2, 1);
   flex: 1 1 0; min-width: 0; border-color: var(--color-neutral-400);
-  transition: flex .55s var(--ease-out), border-color .3s ease;
+  transition: flex .8s var(--prob-ease), border-color .6s ease;
 }
-.prob-bar { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--color-accent); transition: width .6s var(--ease-out); }
+.prob-bar { position: absolute; left: 0; top: 0; height: 2px; width: 0; background: var(--color-accent); transition: width .8s var(--prob-ease); }
 .prob-inner { position: relative; height: 100%; padding: 28px; display: flex; flex-direction: column; }
 .prob-head { display: flex; justify-content: space-between; font: 500 11px/1 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--color-neutral-600); }
 .prob-sign { display: none; font-size: 16px; color: var(--color-text); }
@@ -512,7 +513,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    fills it and scales smoothly as blocks open and close */
 .prob-fig { margin-top: 24px; }
 .prob-fig svg { width: 100%; height: auto; }
-.prob-fig svg * { vector-effect: non-scaling-stroke; transition: stroke .4s ease, fill .4s ease; }
+.prob-fig svg * { vector-effect: non-scaling-stroke; transition: stroke .6s ease, fill .6s ease; }
 .prob-text { margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 12px; }
 .prob h3 { font-size: 36px; line-height: 1; text-wrap: balance; }
 .prob-toggle { text-align: left; cursor: pointer; }
@@ -524,11 +525,19 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .js .prob-sign { display: block; }
 .js .prob.is-open { flex-grow: 2; border-color: var(--color-text); --prob-stroke: var(--color-accent); }
 .js .prob.is-open .prob-bar { width: 100%; }
-.js .prob:not(.is-open) .prob-more { display: none; }
-/* text grows slightly on hover (mouse only), from its bottom-left corner */
-@media (hover: hover) and (pointer: fine) {
-  .prob-text { transform-origin: left bottom; transition: scale .45s var(--ease-out); }
-  .prob:hover .prob-text { scale: 1.06; }
+/* the extra paragraph folds open and fades in instead of popping */
+.js .prob .prob-more {
+  display: grid; grid-template-rows: 0fr; opacity: 0;
+  margin-top: -12px; padding-top: 0; border-top-color: transparent;
+  transition: grid-template-rows .8s var(--prob-ease), margin-top .8s var(--prob-ease),
+              padding-top .8s var(--prob-ease), opacity .3s ease, border-top-color .3s ease;
+}
+.js .prob .prob-more p { min-height: 0; overflow: hidden; }
+.js .prob.is-open .prob-more {
+  grid-template-rows: 1fr; opacity: 1;
+  margin-top: 0; padding-top: 16px; border-top-color: var(--color-neutral-300);
+  transition: grid-template-rows .8s var(--prob-ease), margin-top .8s var(--prob-ease),
+              padding-top .8s var(--prob-ease), opacity .5s ease .3s, border-top-color .5s ease .3s;
 }
 
 /* Technology */
@@ -579,7 +588,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* Contact */
 .contact { background: var(--navy); color: #fff; padding-top: 144px; padding-bottom: 48px; }
-.contact .label { grid-column: 1 / -1; color: var(--navy-300); margin-bottom: 24px; }
 .contact h2 { grid-column: 1 / span 9; font-size: clamp(64px, 8.9vw, 128px); line-height: .95; }
 .contact-intro { grid-column: 1 / span 5; margin-top: 40px; font-size: 18px; color: var(--navy-200); }
 .contact-actions { grid-column: 1 / -1; margin: 56px 0 128px; display: flex; align-items: center; flex-wrap: wrap; gap: 24px 32px; }
@@ -667,7 +675,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .cred-d { font-size: 15px; }
 
   .contact { padding-top: 72px; padding-bottom: 32px; display: flex; flex-direction: column; }
-  .contact .label { margin-bottom: 20px; font-size: 11px; }
   .contact h2 { font-size: 56px; }
   .contact-intro { margin-top: 20px; font-size: 15px; }
   .contact-actions { margin: 32px 0 56px; flex-direction: column; align-items: flex-start; gap: 20px; }
@@ -736,5 +743,4 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .js [data-reveal], .js [data-scramble] { opacity: 1 !important; transform: none !important; }
   .js .hero-media img, .js .reveal-img .frame img, .js .hero-bg img { opacity: 1 !important; }
-  .prob:hover .prob-text { scale: none; }
 }
