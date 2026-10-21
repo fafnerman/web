@@ -527,10 +527,20 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .js .prob.is-open .prob-bar { width: 100%; }
 /* the extra paragraph folds open and fades in instead of popping */
 .js .prob .prob-more {
-  display: grid; grid-template-rows: 0fr; opacity: 0;
+  display: grid; grid-template-rows: 0fr; opacity: 0; overflow: hidden;
   margin-top: -12px; padding-top: 0; border-top-color: transparent;
   transition: grid-template-rows .8s var(--prob-ease), margin-top .8s var(--prob-ease),
-              padding-top .8s var(--prob-ease), opacity .3s ease, border-top-color .3s ease;
+              padding-top .8s var(--prob-ease), opacity .2s ease, border-top-color .2s ease;
+}
+/* Side by side, the text keeps a fixed width while the blocks resize, so it
+   never rewraps mid-animation: titles and lines at the closed width, the
+   extra paragraph at the open width (clipped while its block closes). */
+@media (min-width: 768px) {
+  .probs { container-type: inline-size; }
+  .prob h3, .prob-line { width: calc((100cqw - 32px) / 4 - 58px); max-width: none; flex: none; }
+  /* sized so the longest words ("survivability", "conservation") fits a closed block */
+  .prob h3 { font-size: clamp(16px, calc(((100cqw - 32px) / 4 - 58px) / 6.6), 36px); }
+  .js .prob .prob-more p { width: min(440px, calc((100cqw - 32px) / 2 - 58px)); }
 }
 .js .prob .prob-more p { min-height: 0; overflow: hidden; }
 .js .prob.is-open .prob-more {
