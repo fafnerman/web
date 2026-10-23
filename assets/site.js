@@ -223,15 +223,14 @@
     ];
     var shots = all('[data-ra-shot]').map(function (el) {
       var i = +el.getAttribute('data-ra-shot');
-      var n = el.getAttribute('d').match(/-?\d*\.?\d+/g).map(Number);  // M x y Q cx cy x y
-      return {
+      var n = el.getAttribute('data-ra-curve').split(' ').map(Number);  // x y, control x y, x y
+      var s = {
         el: el, d: el.getAttribute('d'), guided: el.hasAttribute('data-ra-guided'),
-        // dashes are fitted with pathLength so each line starts and ends on a dash;
-        // while a line is drawn, its pathLength is scaled so the dashes keep their size
-        steps: +el.getAttribute('pathLength') || 0, len: el.getTotalLength(),
         p0: [n[0], n[1]], p1: [n[2], n[3]], p2: [n[4], n[5]],
         at: TIMING[i].at, dur: TIMING[i].dur
       };
+      s.dashes = dasher(s);
+      return s;
     });
     var dots = all('[data-ra-dot]');
     var labelWithout = svg.querySelector('[data-ra-label="without"]');
@@ -263,11 +262,30 @@
       var dy = 2 * (1 - t) * (s.p1[1] - s.p0[1]) + 2 * t * (s.p2[1] - s.p1[1]);
       return Math.atan2(dy, dx) * 180 / Math.PI;
     }
-    // the part of the curve flown so far is itself a quadratic curve (de Casteljau)
-    function partial(s, t) {
-      var c = [s.p0[0] + (s.p1[0] - s.p0[0]) * t, s.p0[1] + (s.p1[1] - s.p0[1]) * t];
-      var e = point(s, t);
-      return 'M' + s.p0[0] + ' ' + s.p0[1] + ' Q' + c[0].toFixed(2) + ' ' + c[1].toFixed(2) + ' ' + e[0].toFixed(2) + ' ' + e[1].toFixed(2);
+    // Dashed line along a curve, drawn as real short segments (about 3 units
+    // each, an odd count so it starts and ends on a dash). Being geometry, the
+    // dashes scale with the drawing and look the same in every browser.
+    // Returns a function giving the dashes flown up to curve parameter t.
+    function dasher(c) {
+      var N = 120, pts = [], len = [0], i;
+      for (i = 0; i <= N; i++) pts.push(point(c, i / N));
+      for (i = 1; i <= N; i++) len.push(len[i - 1] + Math.sqrt(Math.pow(pts[i][0] - pts[i - 1][0], 2) + Math.pow(pts[i][1] - pts[i - 1][1], 2)));
+      var L = len[N], steps = Math.round(L / 3); if (steps % 2 === 0) steps++;
+      var seg = L / steps;
+      function at(s) {
+        var lo = 0, hi = N;
+        while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (len[mid] < s) lo = mid; else hi = mid; }
+        var f = (s - len[lo]) / ((len[hi] - len[lo]) || 1);
+        return [pts[lo][0] + (pts[hi][0] - pts[lo][0]) * f, pts[lo][1] + (pts[hi][1] - pts[lo][1]) * f];
+      }
+      return function (t) {
+        var x = t * N, k = Math.min(Math.floor(x), N - 1), s = t >= 1 ? L : len[k] + (len[k + 1] - len[k]) * (x - k), d = '';
+        for (var j = 0; j * seg < s - 1e-9; j += 2) {
+          var a = at(j * seg), b = at(Math.min((j + 1) * seg, s));
+          d += 'M' + a[0].toFixed(2) + ' ' + a[1].toFixed(2) + 'L' + b[0].toFixed(2) + ' ' + b[1].toFixed(2);
+        }
+        return d || 'M0 0';
+      };
     }
     function make(tag, attrs) {
       var el = document.createElementNS(NS, tag);
@@ -299,8 +317,7 @@
         var t = prog(ms, s.at, s.dur), o = fx[i];
         // trail
         s.el.style.opacity = t > 0 ? shown : 0;
-        s.el.setAttribute('d', t > 0 ? partial(s, t) : s.d);
-        if (s.steps) s.el.setAttribute('pathLength', t > 0 ? (s.steps * s.el.getTotalLength() / s.len).toFixed(3) : s.steps);
+        s.el.setAttribute('d', t > 0 ? s.dashes(t) : s.d);
         // rocket body, gone on impact
         var p = point(s, t);
         o.rocket.style.opacity = t > 0 && t < 1 ? 1 : 0;
@@ -329,7 +346,7 @@
     // back to the static drawing, untouched
     function clear() {
       if (layer) { layer.remove(); layer = null; }
-      shots.forEach(function (s) { s.el.setAttribute('d', s.d); if (s.steps) s.el.setAttribute('pathLength', s.steps); });
+      shots.forEach(function (s) { s.el.setAttribute('d', s.d); });
       dots.forEach(function (d) { d.setAttribute('r', 2); });
       touched.forEach(function (el, i) { el.setAttribute('style', saved[i]); });
     }
