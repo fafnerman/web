@@ -200,6 +200,28 @@
     });
   }
 
+  /* ── Technology panels: which one is in view ───────────────────────
+     The panel under the indicator wins (later panels cover earlier ones). */
+  function setupOfferSteps() {
+    var steps = document.querySelector('.offer-steps');
+    var panels = Array.prototype.slice.call(document.querySelectorAll('.offer'));
+    if (!steps || !panels.length) return;
+    var ticking = false;
+    function update() {
+      ticking = false;
+      var r = steps.getBoundingClientRect(), y = r.top + r.height / 2, on = -1;
+      for (var i = panels.length - 1; i >= 0; i--) {
+        var p = panels[i].getBoundingClientRect();
+        if (p.top <= y && p.bottom > y) { on = i; break; }
+      }
+      if (on >= 0) steps.style.setProperty('--step', on);
+    }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
+
   /* ── Photographs fade in once loaded ─────────────────────────────── */
   function revealMedia(container) {
     if (!container) return;
@@ -247,6 +269,7 @@
   setupProbs();
   if (page.afterReveal) page.afterReveal({ observer: observer, reduceMotion: reduceMotion });
   revealMedia(document.querySelector('.hero-media'));  // careers photo band
+  setupOfferSteps();
   revealMedia(document.querySelector('.home-hero'));   // homepage hero
   setupScrollSpy();
   setupCopy();
