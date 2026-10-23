@@ -364,11 +364,14 @@
     return {
       // empty stage, ready to play (call before it comes into view)
       reset: function () { stop(); clear(); if (reduce.matches) return; build(); render(0); },
+      // looping, it starts from the full drawing and fades it out first (the
+      // same fade as between rounds), so starting never jumps
       play: function () {
         stop(); clear();
         if (reduce.matches) return;  // reduced motion: keep the static drawing
-        build(); render(0);
-        start = performance.now(); raf = requestAnimationFrame(tick);
+        var from = loop ? FADE_AT : 0;
+        build(); render(from);
+        start = performance.now() - from / speed; raf = requestAnimationFrame(tick);
       },
       finish: function () { stop(); clear(); },
       get playing() { return raf !== 0; },
@@ -390,7 +393,8 @@
     var A = q('a'), cross = q('cross'), inc = q('in'),
         bar = q('bar'), tickL = q('tick-l'), tickR = q('tick-r'), label = q('label');
 
-    var INCOMING = { at: 700, dur: 1000 };
+    var INTRO = 700;                                       // stand-off fades out, forward launcher fades in
+    var INCOMING = { at: INTRO + 700, dur: 1000 };
     var HIT = INCOMING.at + INCOMING.dur;
     var CROSS = HIT + 150, CROSS_DUR = 400;
     var GONE = HIT + 1100, GONE_DUR = 800;                  // hit launcher fades away
@@ -462,8 +466,10 @@
     function render(ms) {
       var gone = 1 - easeInOut(prog(ms, GONE, GONE_DUR));    // hit launcher and its traces fade
 
-      // forward launcher: there from the start, fades after it is hit
-      A.style.opacity = gone;
+      var intro = 1 - easeInOut(prog(ms, 0, INTRO * .8));   // static picture's stand-off leaving
+
+      // forward launcher: fades in at the start, fades away after it is hit
+      A.style.opacity = easeInOut(prog(ms, INTRO * .3, INTRO * .7)) * gone;
 
       // counter-fire: trail drawn as the rocket comes in
       var t = prog(ms, INCOMING.at, INCOMING.dur), p = point(shot, t);
@@ -481,12 +487,13 @@
       cross.setAttribute('d', 'M-2 98 L' + (-2 + 47 * c).toFixed(2) + ' ' + (98 + 31 * c).toFixed(2));
 
       // then the stand-off distance of the rear launcher is drawn out
+      // (before that, the full bar from the static picture is fading out)
       var b = easeInOut(prog(ms, BAR, BAR_DUR));
-      bar.setAttribute('d', 'M52 30 H' + (52 + 358 * b).toFixed(2));
-      bar.style.opacity = b > 0 ? 1 : 0;
-      tickL.style.opacity = b > 0 ? 1 : 0;
-      tickR.style.opacity = easeOut(prog(ms, BAR + BAR_DUR - 60, 200));
-      label.style.opacity = easeOut(prog(ms, BAR + BAR_DUR * .5, 600));
+      bar.setAttribute('d', 'M52 30 H' + (52 + 358 * (ms < BAR ? 1 : b)).toFixed(2));
+      bar.style.opacity = ms < BAR ? intro : 1;
+      tickL.style.opacity = ms < BAR ? intro : 1;
+      tickR.style.opacity = ms < BAR ? intro : easeOut(prog(ms, BAR + BAR_DUR - 60, 200));
+      label.style.opacity = ms < BAR ? intro : easeOut(prog(ms, BAR + BAR_DUR * .5, 600));
     }
 
     function clear() {
