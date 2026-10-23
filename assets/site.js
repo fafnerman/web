@@ -378,19 +378,173 @@
     };
   }
 
-  // loops while the Range drawing is on screen; reset to blank when it leaves,
-  // so it starts from the beginning next time
-  function setupRangeAnim() {
-    var svg = document.querySelector('[data-range-anim]');
-    if (!svg || !('IntersectionObserver' in window)) return;
-    var anim = rangeAnimation(svg);
-    anim.loop = true;
-    anim.reset();
-    new IntersectionObserver(function (entries) {
-      var e = entries[entries.length - 1];
-      if (e.isIntersecting) { if (!anim.playing) anim.play(); }
-      else anim.reset();
-    }, { threshold: .35 }).observe(svg.parentNode);   // the HTML wrapper: Safari is unreliable observing SVG
+  /* ── Crew animation ──────────────────────────────────────────────
+     Both launchers stand ready; counter-fire hits the forward one, a red
+     line strikes it through and it fades; then the rear launcher's
+     stand-off distance is drawn out. Plays once and ends on the static
+     drawing. */
+  function crewAnimation(svg) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var reduce = reduceMotion;
+    var q = function (s) { return svg.querySelector('[data-cr="' + s + '"]'); };
+    var A = q('a'), cross = q('cross'), inc = q('in'),
+        bar = q('bar'), tickL = q('tick-l'), tickR = q('tick-r'), label = q('label');
+
+    var INCOMING = { at: 700, dur: 1000 };
+    var HIT = INCOMING.at + INCOMING.dur;
+    var CROSS = HIT + 150, CROSS_DUR = 400;
+    var GONE = HIT + 1100, GONE_DUR = 800;                  // hit launcher fades away
+    var BAR = GONE + GONE_DUR + 200, BAR_DUR = 900;
+    var END = BAR + BAR_DUR + 500;
+
+    var clamp = function (x) { return x < 0 ? 0 : x > 1 ? 1 : x; };
+    var easeOut = function (x) { return 1 - Math.pow(1 - x, 3); };
+    var easeInOut = function (x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+    var prog = function (ms, start, len) { return clamp((ms - start) / len); };
+    function point(c, t) {
+      var u = 1 - t;
+      return [u * u * c.p0[0] + 2 * u * t * c.p1[0] + t * t * c.p2[0], u * u * c.p0[1] + 2 * u * t * c.p1[1] + t * t * c.p2[1]];
+    }
+    function angle(c, t) {
+      return Math.atan2(2 * (1 - t) * (c.p1[1] - c.p0[1]) + 2 * t * (c.p2[1] - c.p1[1]),
+                        2 * (1 - t) * (c.p1[0] - c.p0[0]) + 2 * t * (c.p2[0] - c.p1[0])) * 180 / Math.PI;
+    }
+    // Dashed line along a curve, drawn as real short segments (about 3 units
+    // each, an odd count so it starts and ends on a dash). Being geometry, the
+    // dashes scale with the drawing and look the same in every browser.
+    // Returns a function giving the dashes flown up to curve parameter t.
+    function dasher(c) {
+      var N = 120, pts = [], len = [0], i;
+      for (i = 0; i <= N; i++) pts.push(point(c, i / N));
+      for (i = 1; i <= N; i++) len.push(len[i - 1] + Math.sqrt(Math.pow(pts[i][0] - pts[i - 1][0], 2) + Math.pow(pts[i][1] - pts[i - 1][1], 2)));
+      var L = len[N], steps = Math.round(L / 3); if (steps % 2 === 0) steps++;
+      var seg = L / steps;
+      function at(s) {
+        var lo = 0, hi = N;
+        while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (len[mid] < s) lo = mid; else hi = mid; }
+        var f = (s - len[lo]) / ((len[hi] - len[lo]) || 1);
+        return [pts[lo][0] + (pts[hi][0] - pts[lo][0]) * f, pts[lo][1] + (pts[hi][1] - pts[lo][1]) * f];
+      }
+      return function (t) {
+        var x = t * N, k = Math.min(Math.floor(x), N - 1), s = t >= 1 ? L : len[k] + (len[k + 1] - len[k]) * (x - k), d = '';
+        for (var j = 0; j * seg < s - 1e-9; j += 2) {
+          var a = at(j * seg), b = at(Math.min((j + 1) * seg, s));
+          d += 'M' + a[0].toFixed(2) + ' ' + a[1].toFixed(2) + 'L' + b[0].toFixed(2) + ' ' + b[1].toFixed(2);
+        }
+        return d || 'M0 0';
+      };
+    }
+    function make(tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      return el;
+    }
+    var n = inc.getAttribute('data-cr-curve').split(' ').map(Number);   // x y, control x y, x y
+    var shot = { d: inc.getAttribute('d'), p0: [n[0], n[1]], p1: [n[2], n[3]], p2: [n[4], n[5]] };
+    shot.dashes = dasher(shot);
+
+    // remember what the animation changes, to put it back exactly
+    var touched = [A, cross, inc, bar, tickL, tickR, label];
+    var ATTRS = ['style', 'd'];
+    var saved = touched.map(function (el) {
+      return ATTRS.map(function (a) { return el.getAttribute(a); });
+    });
+
+    var layer = null, rocket = null, ring = null;
+    function build() {
+      layer = make('g', { 'data-cr-layer': '' });
+      rocket = make('path', { d: 'M-5 -1.2 L2 -1.2 L4.6 0 L2 1.2 L-5 1.2 Z', style: 'fill:var(--color-neutral-700)' });
+      ring = make('circle', { cx: shot.p2[0], cy: shot.p2[1], r: 0, 'stroke-width': 1, style: 'stroke:var(--ra-miss)' });
+      layer.appendChild(ring); layer.appendChild(rocket);
+      svg.appendChild(layer);
+    }
+
+    function render(ms) {
+      var gone = 1 - easeInOut(prog(ms, GONE, GONE_DUR));    // hit launcher and its traces fade
+
+      // forward launcher: there from the start, fades after it is hit
+      A.style.opacity = gone;
+
+      // counter-fire: trail drawn as the rocket comes in
+      var t = prog(ms, INCOMING.at, INCOMING.dur), p = point(shot, t);
+      inc.setAttribute('d', t > 0 ? shot.dashes(t) : shot.d);
+      inc.style.opacity = t > 0 ? gone : 0;
+      rocket.style.opacity = t > 0 && t < 1 ? 1 : 0;
+      rocket.setAttribute('transform', 'translate(' + p[0].toFixed(2) + ' ' + p[1].toFixed(2) + ') rotate(' + angle(shot, t).toFixed(1) + ')');
+      var r = prog(ms, HIT, 700);
+      ring.setAttribute('r', (2 + 14 * easeOut(r)).toFixed(2));
+      ring.style.opacity = r > 0 && r < 1 ? .7 * (1 - r) : 0;
+
+      // red strike-through drawn across the hit launcher
+      var c = easeOut(prog(ms, CROSS, CROSS_DUR));
+      cross.style.opacity = c > 0 ? 1 : 0;
+      cross.setAttribute('d', 'M-2 98 L' + (-2 + 47 * c).toFixed(2) + ' ' + (98 + 31 * c).toFixed(2));
+
+      // then the stand-off distance of the rear launcher is drawn out
+      var b = easeInOut(prog(ms, BAR, BAR_DUR));
+      bar.setAttribute('d', 'M52 30 H' + (52 + 358 * b).toFixed(2));
+      bar.style.opacity = b > 0 ? 1 : 0;
+      tickL.style.opacity = b > 0 ? 1 : 0;
+      tickR.style.opacity = easeOut(prog(ms, BAR + BAR_DUR - 60, 200));
+      label.style.opacity = easeOut(prog(ms, BAR + BAR_DUR * .5, 600));
+    }
+
+    function clear() {
+      if (layer) { layer.remove(); layer = null; }
+      touched.forEach(function (el, i) {
+        ATTRS.forEach(function (a, j) {
+          if (saved[i][j] === null) el.removeAttribute(a); else el.setAttribute(a, saved[i][j]);
+        });
+      });
+    }
+
+    var raf = 0, start = 0, speed = 1;
+    function tick(now) {
+      var ms = (now - start) * speed;
+      if (ms >= END) { stop(); clear(); return; }
+      render(ms);
+      raf = requestAnimationFrame(tick);
+    }
+    function stop() { cancelAnimationFrame(raf); raf = 0; }
+
+    return {
+      // starting picture: both launchers, nothing else (call before it comes into view)
+      reset: function () { stop(); clear(); if (reduce.matches) return; build(); render(0); },
+      play: function () {
+        stop(); clear();
+        if (reduce.matches) return;  // reduced motion: keep the static drawing
+        build(); render(0);
+        start = performance.now(); raf = requestAnimationFrame(tick);
+      },
+      finish: function () { stop(); clear(); },
+      get playing() { return raf !== 0; },
+      set speed(v) { speed = v; }
+    };
+  }
+
+  /* ── Box drawings: animate only the open box, while it is on screen ──
+     Range loops; Crew plays once each time its box opens. A box that is
+     closed or off screen shows its static drawing. */
+  function setupFigAnims() {
+    if (!('IntersectionObserver' in window) || !('MutationObserver' in window)) return;
+    var items = [];
+    var range = document.querySelector('[data-range-anim]');
+    if (range) { var r = rangeAnimation(range); r.loop = true; items.push({ svg: range, anim: r }); }
+    var crew = document.querySelector('[data-crew-anim]');
+    if (crew) items.push({ svg: crew, anim: crewAnimation(crew) });
+    items.forEach(function (it) {
+      var box = it.svg.closest('.prob'), inView = false, active = false;
+      function update() {
+        var want = inView && box.classList.contains('is-open');
+        if (want && !active) { active = true; it.anim.play(); }
+        else if (!want && active) { active = false; it.anim.finish(); }
+      }
+      // watch the HTML wrapper: Safari is unreliable observing SVG
+      new IntersectionObserver(function (entries) {
+        inView = entries[entries.length - 1].isIntersecting; update();
+      }, { threshold: .35 }).observe(it.svg.parentNode);
+      new MutationObserver(update).observe(box, { attributes: true, attributeFilter: ['class'] });
+    });
   }
 
   /* ── Photographs fade in once loaded ─────────────────────────────── */
@@ -438,7 +592,7 @@
   setupReveal();
   setupScramble();
   setupProbs();
-  setupRangeAnim();
+  setupFigAnims();
   if (page.afterReveal) page.afterReveal({ observer: observer, reduceMotion: reduceMotion });
   revealMedia(document.querySelector('.hero-media'));  // careers photo band
   revealMedia(document.querySelector('.home-hero'));   // homepage hero

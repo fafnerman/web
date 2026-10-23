@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap">
-  <link rel="stylesheet" href="assets/site.css?v=202610231310">
+  <link rel="stylesheet" href="assets/site.css?v=202610231317">
   <link rel="preload" as="image" href="images/image-1.jpg">
 </head>
 <body>
@@ -152,12 +152,50 @@
           <div class="prob-inner">
             <div class="prob-head"><span class="prob-sign" aria-hidden="true">+</span></div>
             <div class="prob-fig" aria-hidden="true">
-            <svg viewBox="0 0 420 150" width="100%" height="150" fill="none" preserveAspectRatio="xMinYMid meet" style="display:block;overflow:visible">
+            <svg data-crew-anim viewBox="0 0 420 150" width="100%" height="150" fill="none" preserveAspectRatio="xMinYMid meet" style="display:block;overflow:visible">
             <line x1="0" y1="70" x2="420" y2="70" style="stroke:var(--color-neutral-300)" stroke-width="1"></line>
-            <path d="M8 58 h56 v-14 h20 l10 14 v6 h-86z M30 44 l44 -22 l4 6 l-40 20" style="stroke:var(--color-neutral-700)" stroke-width="1"></path>
-            <circle cx="22" cy="66" r="5" style="stroke:var(--color-neutral-700)"></circle><circle cx="50" cy="66" r="5" style="stroke:var(--color-neutral-700)"></circle><circle cx="80" cy="66" r="5" style="stroke:var(--color-neutral-700)"></circle>
-            <path d="M100 30 H410 M100 24 V36 M410 24 V36" style="stroke:var(--prob-stroke)" stroke-width="1"></path>
-            <g style="font:500 9px var(--font-body);letter-spacing:.14em"><text x="210" y="20" style="fill:var(--prob-stroke)">STAND-OFF</text></g>
+
+            <!-- forward launcher, close to the front: hit and struck through -->
+            <g data-cr="a" transform="translate(230 -56)" style="opacity:0">
+              <g style="stroke:var(--color-neutral-700)" stroke-width="1">
+                <path d="M3 120 H40 M3 117 H30 V120 M3 117 V120"></path>
+                <path d="M30 120 V112 H35.5 L40 116.5 V120"></path>
+                <path d="M32 113.6 H35 L37.4 116 H32 Z" stroke-width=".8"></path>
+                <circle cx="8.5" cy="123" r="3" style="fill:#fff"></circle>
+                <circle cx="15.5" cy="123" r="3" style="fill:#fff"></circle>
+                <circle cx="35" cy="123" r="3" style="fill:#fff"></circle>
+                <path d="M15 117 L17.5 111.4"></path>
+                <g transform="rotate(-38 7 114.5)">
+                  <rect x="7" y="112" width="24" height="5" style="fill:#fff"></rect>
+                  <path d="M8 113.7 H30 M8 115.3 H30" stroke-width=".6"></path>
+                </g>
+              </g>
+              <path data-cr="cross" d="M-2 98 L45 129" style="stroke:var(--ra-miss);opacity:0" stroke-width="1.6"></path>
+            </g>
+            <!-- counter-fire from the front -->
+            <path data-cr="in" data-cr-curve="420 6 350 -22 251 58" d="M0 0" style="stroke:var(--color-neutral-500);opacity:0" stroke-width="1"></path>
+
+            <!-- launcher far back on the left: never hit -->
+            <g data-cr="b" transform="translate(0 -56)">
+              <g style="stroke:var(--color-neutral-700)" stroke-width="1">
+                <path d="M3 120 H40 M3 117 H30 V120 M3 117 V120"></path>
+                <path d="M30 120 V112 H35.5 L40 116.5 V120"></path>
+                <path d="M32 113.6 H35 L37.4 116 H32 Z" stroke-width=".8"></path>
+                <circle cx="8.5" cy="123" r="3" style="fill:#fff"></circle>
+                <circle cx="15.5" cy="123" r="3" style="fill:#fff"></circle>
+                <circle cx="35" cy="123" r="3" style="fill:#fff"></circle>
+                <path d="M15 117 L17.5 111.4"></path>
+                <g transform="rotate(-38 7 114.5)">
+                  <rect x="7" y="112" width="24" height="5" style="fill:#fff"></rect>
+                  <path d="M8 113.7 H30 M8 115.3 H30" stroke-width=".6"></path>
+                </g>
+              </g>
+            </g>
+            <!-- stand-off distance from the rear launcher to the front -->
+            <path data-cr="bar" d="M52 30 H410" style="stroke:var(--prob-stroke)" stroke-width="1"></path>
+            <path data-cr="tick-l" d="M52 24 V36" style="stroke:var(--prob-stroke)" stroke-width="1"></path>
+            <path data-cr="tick-r" d="M410 24 V36" style="stroke:var(--prob-stroke)" stroke-width="1"></path>
+            <g style="font:500 9px var(--font-body);letter-spacing:.14em"><text data-cr="label" x="200" y="20" style="fill:var(--prob-stroke)">STAND-OFF</text></g>
             </svg>
             </div>
             <div class="prob-text">
@@ -269,6 +307,6 @@
     </div>
   </footer>
 
-  <script src="assets/site.js?v=202610231310"></script>
+  <script src="assets/site.js?v=202610231317"></script>
 </body>
 </html>
