@@ -351,11 +351,11 @@
       touched.forEach(function (el, i) { el.setAttribute('style', saved[i]); });
     }
 
-    var raf = 0, start = 0, speed = 1, loop = false, onDone = null;
+    var raf = 0, start = 0, speed = 1, loop = false, intro = false, onDone = null;
     function tick(now) {
       var ms = (now - start) * speed;
-      if (loop && ms >= LOOP_END) { start = now; ms = 0; }          // next round, seamlessly
-      else if (!loop && ms >= END) { stop(); clear(); if (onDone) onDone(); return; }
+      if (ms >= LOOP_END && (intro || loop)) { intro = false; start = now; ms = 0; }  // round starts, seamlessly
+      else if (!intro && !loop && ms >= END) { stop(); clear(); if (onDone) onDone(); return; }
       render(ms);
       raf = requestAnimationFrame(tick);
     }
@@ -364,14 +364,14 @@
     return {
       // empty stage, ready to play (call before it comes into view)
       reset: function () { stop(); clear(); if (reduce.matches) return; build(); render(0); },
-      // looping, it starts from the full drawing and fades it out first (the
-      // same fade as between rounds), so starting never jumps
+      // starts from the full drawing and fades it out first (the same fade as
+      // between rounds), so starting never jumps
       play: function () {
         stop(); clear();
         if (reduce.matches) return;  // reduced motion: keep the static drawing
-        var from = loop ? FADE_AT : 0;
-        build(); render(from);
-        start = performance.now() - from / speed; raf = requestAnimationFrame(tick);
+        intro = true;
+        build(); render(FADE_AT);
+        start = performance.now() - FADE_AT / speed; raf = requestAnimationFrame(tick);
       },
       finish: function () { stop(); clear(); },
       get playing() { return raf !== 0; },
@@ -530,13 +530,13 @@
   }
 
   /* ── Box drawings: animate only the open box, while it is on screen ──
-     Range loops; Crew plays once each time its box opens. A box that is
-     closed or off screen shows its static drawing. */
+     Each plays once every time its box opens (or comes back on screen
+     open). A box that is closed or off screen shows its static drawing. */
   function setupFigAnims() {
     if (!('IntersectionObserver' in window) || !('MutationObserver' in window)) return;
     var items = [];
     var range = document.querySelector('[data-range-anim]');
-    if (range) { var r = rangeAnimation(range); r.loop = true; items.push({ svg: range, anim: r }); }
+    if (range) items.push({ svg: range, anim: rangeAnimation(range) });
     var crew = document.querySelector('[data-crew-anim]');
     if (crew) items.push({ svg: crew, anim: crewAnimation(crew) });
     items.forEach(function (it) {
