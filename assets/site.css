@@ -455,7 +455,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* ══ Homepage ═════════════════════════════════════════════════════════ */
 .home-hero {
   position: relative; overflow: hidden; color: #fff;
-  height: 100vh; height: 100svh; min-height: 560px;
+  height: 100vh; height: min(100svh, max(560px, 80vw)); min-height: 560px;
   background: var(--color-neutral-800);
 }
 .hero-bg { position: absolute; inset: 0; margin: 0; }
@@ -476,7 +476,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* Mission: white ground, statement and an outline drawing of the rocket */
 /* A full screen of its own: statement at the top, drawing directly beneath it */
-.mission { min-height: calc(100svh - var(--header-h)); padding-top: 144px; padding-bottom: 112px; align-items: start; align-content: start; row-gap: 64px; background: #fff; }
+.mission { padding-top: 144px; padding-bottom: 40px; align-items: start; align-content: start; row-gap: 64px; background: #fff; }
 .mission .label { padding-top: 12px; color: var(--color-neutral-600); }
 .mission-statement { grid-column: 3 / span 10; margin: 0; font: 600 clamp(44px, 5.6vw, 84px)/.96 var(--font-heading); letter-spacing: -.01em; text-wrap: pretty; }
 .mission-statement .dim { color: var(--color-neutral-400); }
@@ -556,18 +556,18 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    next one scrolls up over it, so the three read as stacked pages in one
    continuous scroll (the same sticky technique as the homepage hero). */
 .offers {
-  --offer-h: max(480px, calc(100svh - var(--header-h)));
+  --offer-h: min(calc(100svh - var(--header-h)), max(520px, 62.5vw));
   position: relative; grid-column: 1 / -1; margin: 0 calc(var(--gutter) * -1);
 }
 .offer {
   position: sticky; top: var(--header-h);
-  height: max(480px, calc(100vh - var(--header-h))); height: var(--offer-h); overflow: hidden; background: var(--color-accent-900);
+  height: min(calc(100vh - var(--header-h)), max(520px, 62.5vw)); height: var(--offer-h); overflow: hidden; background: var(--color-accent-900);
   border-top: 1px solid rgb(255 255 255 / .18);
 }
 /* extra scroll between the second and third panel: the second stays pinned a little longer */
 /* extra scroll before the next panel arrives: DLLR-MARS-GK stays pinned longest */
-#uav-systems { margin-top: 25vh; }
-#advanced-guidance { margin-top: 15vh; }
+#uav-systems { margin-top: calc(var(--offer-h) * .3); }
+#advanced-guidance { margin-top: calc(var(--offer-h) * .18); }
 .offer-media { position: absolute; inset: 0; }
 .offer-media .frame { background: var(--color-accent-900); }
 .offer .duotone img { filter: grayscale(1) contrast(1.05) brightness(.6); }
@@ -656,7 +656,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .home-hero .hero-cta { margin-top: 0; }
   .home-hero .hero-cta .btn { display: flex; width: 100%; padding: 16px 20px; font-size: 14px; }
 
-  .mission { display: flex; flex-direction: column; row-gap: 0; padding-top: 96px; padding-bottom: 72px; }
+  .mission { display: flex; flex-direction: column; row-gap: 0; padding-top: 96px; padding-bottom: 24px; }
   .mission .label { margin-bottom: 24px; font-size: 11px; }
   .mission-statement { font-size: clamp(32px, 9.5vw, 40px); line-height: 1.02; }
   .mission-drawing { width: calc(100% + var(--gutter) * 2); margin: 0 calc(var(--gutter) * -1); padding-top: 40px; }

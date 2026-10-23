@@ -22,7 +22,11 @@
   function onScrollHeader() {
     if (!header) return;
     // homepage: stay transparent over the pinned hero until content slides under the header
-    if (overlay) header.classList.toggle('is-solid', window.scrollY > window.innerHeight - header.offsetHeight - 8);
+    if (overlay) {
+      var hero = document.querySelector('.home-hero');
+      var heroH = hero ? hero.offsetHeight : window.innerHeight;
+      header.classList.toggle('is-solid', window.scrollY > heroH - header.offsetHeight - 8);
+    }
     else header.classList.toggle('is-compact', window.scrollY > 24);
   }
 
