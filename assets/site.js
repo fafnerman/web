@@ -390,7 +390,7 @@
       var e = entries[entries.length - 1];
       if (e.isIntersecting) { if (!anim.playing) anim.play(); }
       else anim.reset();
-    }, { threshold: .35 }).observe(svg);
+    }, { threshold: .35 }).observe(svg.parentNode);   // the HTML wrapper: Safari is unreliable observing SVG
   }
 
   /* ── Photographs fade in once loaded ─────────────────────────────── */
