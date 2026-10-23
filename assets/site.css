@@ -344,6 +344,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   transition-delay: calc(var(--d, 0) * 60ms);
 }
 .js [data-reveal].is-in { opacity: 1; transform: none; }
+/* a slower, more noticeable fade for lead sentences */
+.js [data-reveal-late] { transform: translateY(20px); transition-duration: 1.4s; }
 
 .js .hero-media img, .js .reveal-img .frame img, .js .hero-bg img { opacity: 0; transition: opacity 1.1s ease; }
 .js .hero-media.is-in img, .js .reveal-img.is-in .frame img, .js .home-hero.is-in .hero-bg img { opacity: 1; }
@@ -455,7 +457,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* ══ Homepage ═════════════════════════════════════════════════════════ */
 .home-hero {
   position: relative; overflow: hidden; color: #fff;
-  height: 100vh; height: min(100svh, max(560px, 80vw)); min-height: 560px;
+  height: 100vh; height: 100svh; min-height: 560px;
   background: var(--color-neutral-800);
 }
 .hero-bg { position: absolute; inset: 0; margin: 0; }
@@ -556,12 +558,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    next one scrolls up over it, so the three read as stacked pages in one
    continuous scroll (the same sticky technique as the homepage hero). */
 .offers {
-  --offer-h: min(calc(100svh - var(--header-h)), max(520px, 62.5vw));
+  --offer-h: max(480px, calc(100svh - var(--header-h)));
   position: relative; grid-column: 1 / -1; margin: 0 calc(var(--gutter) * -1);
 }
 .offer {
   position: sticky; top: var(--header-h);
-  height: min(calc(100vh - var(--header-h)), max(520px, 62.5vw)); height: var(--offer-h); overflow: hidden; background: var(--color-accent-900);
+  height: max(480px, calc(100vh - var(--header-h))); height: var(--offer-h); overflow: hidden; background: var(--color-accent-900);
   border-top: 1px solid rgb(255 255 255 / .18);
 }
 /* extra scroll between the second and third panel: the second stays pinned a little longer */
@@ -752,11 +754,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .home-hero h1 { font-size: clamp(36px, 7vw, 64px); }
 }
 
-/* Phones and portrait screens: no pinned scrolling, sections simply follow
-   one another (pinning there mostly shows panels sliding over a gap). */
-@media (max-width: 767px), (max-aspect-ratio: 4 / 5) {
-  .home-hero { position: relative; }
-  .offer { position: relative; top: auto; }
+/* Phones and portrait screens: no pinned scrolling. The hero and the three
+   product panels are stacked in order, each capped in height so a tall
+   screen shows the next one instead of stretching the photo. */
+@media (max-width: 767px), (orientation: portrait) {
+  .home-hero { position: relative; height: min(100svh, max(560px, 80vw)); }
+  .offers { --offer-h: min(calc(100svh - var(--header-h)), max(520px, 62.5vw)); }
+  .offer { position: relative; top: auto; height: var(--offer-h); }
   #uav-systems, #advanced-guidance { margin-top: 0; }
 }
 

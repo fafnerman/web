@@ -84,7 +84,9 @@
       pending = pending.filter(function (el) {
         var r = el.getBoundingClientRect();
         if (r.width === 0 && r.height === 0) return true;  // not displayed at this size
-        if (r.top < line) { el.classList.add('is-in'); return false; }
+        // [data-reveal-late] waits until it is well onto the screen, so its fade is seen
+        var at = el.hasAttribute('data-reveal-late') ? window.innerHeight * 0.8 : line;
+        if (r.top < at) { el.classList.add('is-in'); return false; }
         return true;
       });
       if (!pending.length) {
