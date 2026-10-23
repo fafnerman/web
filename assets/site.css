@@ -747,6 +747,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .home-hero h1 { font-size: clamp(36px, 7vw, 64px); }
 }
 
+/* Phones and portrait screens: no pinned scrolling, sections simply follow
+   one another (pinning there mostly shows panels sliding over a gap). */
+@media (max-width: 767px), (max-aspect-ratio: 4 / 5) {
+  .home-hero { position: relative; }
+  .offer { position: relative; top: auto; }
+  #uav-systems, #advanced-guidance { margin-top: 0; }
+}
+
 /* Respect reduced-motion preferences: show everything, animate nothing. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
