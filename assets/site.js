@@ -200,6 +200,182 @@
     });
   }
 
+  /* ── Range animation ─────────────────────────────────────────────
+     Four unguided rockets fall short and scatter; then two guided rockets
+     fly the same long arc and both land on the target. Every frame is
+     computed from the elapsed time alone. Looping, each round fades out
+     before the next; stopped, all inline changes are removed and the
+     drawing is back to its static form (also what reduced motion and
+     no-JS visitors see). */
+  function rangeAnimation(svg) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var reduce = reduceMotion;
+    var all = function (s) { return Array.prototype.slice.call(svg.querySelectorAll(s)); };
+
+    // when each shot fires and how long it flies (ms)
+    var TIMING = [
+      { at: 750,  dur: 900 },
+      { at: 1100, dur: 950 },
+      { at: 1450, dur: 1000 },
+      { at: 1800, dur: 1050 },
+      { at: 3800, dur: 2000 },  // guided
+      { at: 4500, dur: 2000 }   // guided, same lane
+    ];
+    var shots = all('[data-ra-shot]').map(function (el) {
+      var i = +el.getAttribute('data-ra-shot');
+      var n = el.getAttribute('d').match(/-?\d*\.?\d+/g).map(Number);  // M x y Q cx cy x y
+      return {
+        el: el, d: el.getAttribute('d'), guided: el.hasAttribute('data-ra-guided'),
+        // dashes are fitted with pathLength so each line starts and ends on a dash;
+        // while a line is drawn, its pathLength is scaled so the dashes keep their size
+        steps: +el.getAttribute('pathLength') || 0, len: el.getTotalLength(),
+        p0: [n[0], n[1]], p1: [n[2], n[3]], p2: [n[4], n[5]],
+        at: TIMING[i].at, dur: TIMING[i].dur
+      };
+    });
+    var dots = all('[data-ra-dot]');
+    var labelWithout = svg.querySelector('[data-ra-label="without"]');
+    var labelWith = svg.querySelector('[data-ra-label="with"]');
+    var unguided = shots.filter(function (s) { return !s.guided; });
+    var guidedShots = shots.filter(function (s) { return s.guided; });
+    var landed = function (list) { return Math.max.apply(null, list.map(function (s) { return s.at + s.dur; })); };
+    var scatterAt = landed(unguided);                          // last miss is down
+    var lastHitAt = landed(guidedShots);
+    var END = lastHitAt + 900;              // single play: ends on the full drawing
+    // looping: hold the full drawing, fade lines, dots and labels out, and start
+    // the next round from that empty state, so there is no jump between rounds
+    var FADE_AT = lastHitAt + 2000, FADE = 1000, LOOP_END = FADE_AT + FADE + 500;
+    // remember each animated element's own inline style, to put back exactly
+    var touched = shots.map(function (s) { return s.el; }).concat(dots, [labelWithout, labelWith]);
+    var saved = touched.map(function (el) { return el.getAttribute('style'); });
+
+    var clamp = function (x) { return x < 0 ? 0 : x > 1 ? 1 : x; };
+    var easeOut = function (x) { return 1 - Math.pow(1 - x, 3); };
+    var easeInOut = function (x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+    var prog = function (ms, start, len) { return clamp((ms - start) / len); };
+    function point(s, t) {
+      var u = 1 - t;
+      return [u * u * s.p0[0] + 2 * u * t * s.p1[0] + t * t * s.p2[0],
+              u * u * s.p0[1] + 2 * u * t * s.p1[1] + t * t * s.p2[1]];
+    }
+    function angle(s, t) {
+      var dx = 2 * (1 - t) * (s.p1[0] - s.p0[0]) + 2 * t * (s.p2[0] - s.p1[0]);
+      var dy = 2 * (1 - t) * (s.p1[1] - s.p0[1]) + 2 * t * (s.p2[1] - s.p1[1]);
+      return Math.atan2(dy, dx) * 180 / Math.PI;
+    }
+    // the part of the curve flown so far is itself a quadratic curve (de Casteljau)
+    function partial(s, t) {
+      var c = [s.p0[0] + (s.p1[0] - s.p0[0]) * t, s.p0[1] + (s.p1[1] - s.p0[1]) * t];
+      var e = point(s, t);
+      return 'M' + s.p0[0] + ' ' + s.p0[1] + ' Q' + c[0].toFixed(2) + ' ' + c[1].toFixed(2) + ' ' + e[0].toFixed(2) + ' ' + e[1].toFixed(2);
+    }
+    function make(tag, attrs) {
+      var el = document.createElementNS(NS, tag);
+      for (var k in attrs) el.setAttribute(k, attrs[k]);
+      return el;
+    }
+
+    // overlay: rocket bodies, launch flashes and impact rings (removed when done)
+    var layer = null, fx = [];
+    function build() {
+      layer = make('g', { 'data-ra-layer': '' });
+      fx = shots.map(function (s) {
+        var color = s.guided ? 'var(--prob-stroke)' : 'var(--color-neutral-600)';
+        var impact = s.guided ? 'var(--ra-hit)' : 'var(--ra-miss)';
+        var o = {
+          rocket: make('path', { d: 'M-5 -1.2 L2 -1.2 L4.6 0 L2 1.2 L-5 1.2 Z', style: 'fill:' + color }),
+          flash: make('circle', { cx: s.p0[0], cy: s.p0[1], r: 0, style: 'fill:' + color }),
+          ring: make('circle', { cx: s.p2[0], cy: 126, r: 0, 'stroke-width': 1, style: 'stroke:' + impact })
+        };
+        layer.appendChild(o.flash); layer.appendChild(o.ring); layer.appendChild(o.rocket);
+        return o;
+      });
+      svg.appendChild(layer);
+    }
+
+    function render(ms) {
+      var shown = 1 - easeInOut(prog(ms, FADE_AT, FADE));   // end-of-round fade (looping only)
+      shots.forEach(function (s, i) {
+        var t = prog(ms, s.at, s.dur), o = fx[i];
+        // trail
+        s.el.style.opacity = t > 0 ? shown : 0;
+        s.el.setAttribute('d', t > 0 ? partial(s, t) : s.d);
+        if (s.steps) s.el.setAttribute('pathLength', t > 0 ? (s.steps * s.el.getTotalLength() / s.len).toFixed(3) : s.steps);
+        // rocket body, gone on impact
+        var p = point(s, t);
+        o.rocket.style.opacity = t > 0 && t < 1 ? 1 : 0;
+        o.rocket.setAttribute('transform', 'translate(' + p[0].toFixed(2) + ' ' + p[1].toFixed(2) + ') rotate(' + angle(s, t).toFixed(1) + ')');
+        // launch flash
+        var f = prog(ms, s.at, 320);
+        o.flash.setAttribute('r', (1 + 5 * easeOut(f)).toFixed(2));
+        o.flash.style.opacity = f > 0 && f < 1 ? .45 * (1 - f) : 0;
+        // impact ring
+        var r = prog(ms, s.at + s.dur, s.guided ? 900 : 600);
+        o.ring.setAttribute('r', (2 + (s.guided ? 14 : 9) * easeOut(r)).toFixed(2));
+        o.ring.style.opacity = r > 0 && r < 1 ? .7 * (1 - r) : 0;
+      });
+      // impact dots pop in where each rocket lands (red misses, green hit)
+      dots.forEach(function (d) {
+        var s = shots[+d.getAttribute('data-ra-dot')];
+        d.setAttribute('r', (2 * easeOut(prog(ms, s.at + s.dur, 220))).toFixed(2));
+        d.style.opacity = shown;
+      });
+      // each label introduces its round: "without kit" before the first three
+      // shots, "with guidance kit" once they have landed, before the guided shot
+      labelWithout.style.opacity = easeOut(prog(ms, 0, 600)) * shown;
+      labelWith.style.opacity = easeOut(prog(ms, scatterAt + 300, 600)) * shown;
+    }
+
+    // back to the static drawing, untouched
+    function clear() {
+      if (layer) { layer.remove(); layer = null; }
+      shots.forEach(function (s) { s.el.setAttribute('d', s.d); if (s.steps) s.el.setAttribute('pathLength', s.steps); });
+      dots.forEach(function (d) { d.setAttribute('r', 2); });
+      touched.forEach(function (el, i) { el.setAttribute('style', saved[i]); });
+    }
+
+    var raf = 0, start = 0, speed = 1, loop = false, onDone = null;
+    function tick(now) {
+      var ms = (now - start) * speed;
+      if (loop && ms >= LOOP_END) { start = now; ms = 0; }          // next round, seamlessly
+      else if (!loop && ms >= END) { stop(); clear(); if (onDone) onDone(); return; }
+      render(ms);
+      raf = requestAnimationFrame(tick);
+    }
+    function stop() { cancelAnimationFrame(raf); raf = 0; }
+
+    return {
+      // empty stage, ready to play (call before it comes into view)
+      reset: function () { stop(); clear(); if (reduce.matches) return; build(); render(0); },
+      play: function () {
+        stop(); clear();
+        if (reduce.matches) return;  // reduced motion: keep the static drawing
+        build(); render(0);
+        start = performance.now(); raf = requestAnimationFrame(tick);
+      },
+      finish: function () { stop(); clear(); },
+      get playing() { return raf !== 0; },
+      set speed(v) { speed = v; },
+      set loop(v) { loop = !!v; },
+      set onDone(fn) { onDone = fn; }
+    };
+  }
+
+  // loops while the Range drawing is on screen; reset to blank when it leaves,
+  // so it starts from the beginning next time
+  function setupRangeAnim() {
+    var svg = document.querySelector('[data-range-anim]');
+    if (!svg || !('IntersectionObserver' in window)) return;
+    var anim = rangeAnimation(svg);
+    anim.loop = true;
+    anim.reset();
+    new IntersectionObserver(function (entries) {
+      var e = entries[entries.length - 1];
+      if (e.isIntersecting) { if (!anim.playing) anim.play(); }
+      else anim.reset();
+    }, { threshold: .35 }).observe(svg);
+  }
+
   /* ── Photographs fade in once loaded ─────────────────────────────── */
   function revealMedia(container) {
     if (!container) return;
@@ -245,6 +421,7 @@
   setupReveal();
   setupScramble();
   setupProbs();
+  setupRangeAnim();
   if (page.afterReveal) page.afterReveal({ observer: observer, reduceMotion: reduceMotion });
   revealMedia(document.querySelector('.hero-media'));  // careers photo band
   revealMedia(document.querySelector('.home-hero'));   // homepage hero

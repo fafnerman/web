@@ -516,6 +516,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .prob-fig { margin-top: 24px; }
 .prob-fig svg { width: 100%; height: auto; }
 .prob-fig svg * { vector-effect: non-scaling-stroke; transition: stroke .4s ease, fill .4s ease; }
+/* Range animation impact dots: misses muted red, guided hits muted green */
+.prob-fig svg { --ra-miss: #b4544c; --ra-hit: #4f8a5f; }
 .prob-text { margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 12px; }
 .prob h3 { font-size: 36px; line-height: 1; text-wrap: balance; }
 .prob-toggle { text-align: left; cursor: pointer; }

@@ -103,16 +103,40 @@
           <div class="prob-inner">
             <div class="prob-head"><span class="prob-sign" aria-hidden="true">−</span></div>
             <div class="prob-fig" aria-hidden="true">
-            <svg viewBox="0 0 420 150" width="100%" height="150" fill="none" preserveAspectRatio="xMinYMid meet" style="display:block;overflow:visible">
+            <svg data-range-anim viewBox="0 0 420 150" width="100%" height="150" fill="none" preserveAspectRatio="xMinYMid meet" style="display:block;overflow:visible">
             <line x1="0" y1="126" x2="420" y2="126" style="stroke:var(--color-neutral-400)" stroke-width="1"></line>
-            <path d="M14 120 h22 v6 h-22z M20 120 l14 -10" style="stroke:var(--color-neutral-700)" stroke-width="1"></path>
-            <path d="M34 110 Q90 50 150 122 M34 110 Q100 44 170 123 M34 110 Q110 40 192 124" style="stroke:var(--color-neutral-400)" stroke-width="1" stroke-dasharray="3 3"></path>
-            <ellipse cx="170" cy="126" rx="30" ry="6" style="stroke:var(--color-neutral-400)" stroke-dasharray="2 3"></ellipse>
-            <circle cx="150" cy="126" r="2" style="fill:var(--color-neutral-500)"></circle><circle cx="170" cy="126" r="2" style="fill:var(--color-neutral-500)"></circle><circle cx="192" cy="126" r="2" style="fill:var(--color-neutral-500)"></circle>
-            <path d="M34 110 Q220 -40 392 122" style="stroke:var(--prob-stroke)" stroke-width="1.4"></path>
-            <circle cx="392" cy="126" r="7" style="stroke:var(--prob-stroke)" stroke-width="1.2"></circle>
-            <path d="M392 112 V140 M378 126 H406" style="stroke:var(--prob-stroke)" stroke-width=".8"></path>
-            <g style="font:500 9px var(--font-body);letter-spacing:.14em"><text x="130" y="72" style="fill:var(--color-neutral-600)">WITHOUT KIT</text><text x="200" y="20" style="fill:var(--prob-stroke)">WITH GUIDANCE KIT</text></g>
+            <!-- launcher truck, facing the target: bed and cab, three wheels, and the
+                 rocket pod raised 38° on the bed; rockets leave from the pod's front end -->
+            <g style="stroke:var(--color-neutral-700)" stroke-width="1">
+              <path d="M3 120 H40 M3 117 H30 V120 M3 117 V120"></path>
+              <path d="M30 120 V112 H35.5 L40 116.5 V120"></path>
+              <path d="M32 113.6 H35 L37.4 116 H32 Z" stroke-width=".8"></path>
+              <circle cx="8.5" cy="123" r="3" style="fill:#fff"></circle>
+              <circle cx="15.5" cy="123" r="3" style="fill:#fff"></circle>
+              <circle cx="35" cy="123" r="3" style="fill:#fff"></circle>
+              <path d="M15 117 L17.5 111.4"></path>
+              <g transform="rotate(-38 7 114.5)">
+                <rect x="7" y="112" width="24" height="5" style="fill:#fff"></rect>
+                <path d="M8 113.7 H30 M8 115.3 H30" stroke-width=".6"></path>
+              </g>
+            </g>
+            <!-- four unguided shots scatter short of the target -->
+            <path data-ra-shot="0" d="M25.9 99.8 Q86 52 144 126" style="stroke:var(--color-neutral-400)" stroke-width="1" pathLength="47" stroke-dasharray="1 1"></path>
+            <path data-ra-shot="1" d="M25.9 99.8 Q94 48 160 126" style="stroke:var(--color-neutral-400)" stroke-width="1" pathLength="53" stroke-dasharray="1 1"></path>
+            <path data-ra-shot="2" d="M25.9 99.8 Q103 44 178 126" style="stroke:var(--color-neutral-400)" stroke-width="1" pathLength="59" stroke-dasharray="1 1"></path>
+            <path data-ra-shot="3" d="M25.9 99.8 Q112 40 197 126" style="stroke:var(--color-neutral-400)" stroke-width="1" pathLength="65" stroke-dasharray="1 1"></path>
+            <circle data-ra-dot="0" cx="144" cy="126" r="2" style="fill:var(--ra-miss)"></circle>
+            <circle data-ra-dot="1" cx="160" cy="126" r="2" style="fill:var(--ra-miss)"></circle>
+            <circle data-ra-dot="2" cx="178" cy="126" r="2" style="fill:var(--ra-miss)"></circle>
+            <circle data-ra-dot="3" cx="197" cy="126" r="2" style="fill:var(--ra-miss)"></circle>
+            <!-- two guided shots fly the same lane and land on the same point -->
+            <path data-ra-shot="4" data-ra-guided d="M25.9 99.8 Q220 -40 392 126" style="stroke:var(--prob-stroke)" stroke-width="1.4" pathLength="135" stroke-dasharray="1 1"></path>
+            <path data-ra-shot="5" data-ra-guided d="M25.9 99.8 Q220 -40 392 126" style="stroke:var(--prob-stroke)" stroke-width="1.4" pathLength="135" stroke-dasharray="1 1"></path>
+            <circle data-ra-dot="4" cx="392" cy="126" r="2" style="fill:var(--ra-hit)"></circle>
+            <g style="font:500 9px var(--font-body);letter-spacing:.14em">
+              <text data-ra-label="without" x="130" y="72" style="fill:var(--color-neutral-600)">WITHOUT KIT</text>
+              <text data-ra-label="with" x="200" y="20" style="fill:var(--prob-stroke)">WITH GUIDANCE KIT</text>
+            </g>
             </svg>
             </div>
             <div class="prob-text">
