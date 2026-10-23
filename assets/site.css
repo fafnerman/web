@@ -573,6 +573,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .offer .duotone img { filter: grayscale(1) contrast(1.05) brightness(.6); }
 .offer-media::after { content: ""; position: absolute; inset: 0; background: rgb(16 42 67 / .35); }
 .offer-inner { position: relative; z-index: 1; height: 100%; padding-top: 40px; padding-bottom: 72px; display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
+/* which of the three panels this is: three hairlines, the current one lit */
+.offer-steps { position: absolute; top: 40px; right: var(--gutter); display: flex; gap: 6px; }
+.offer-steps i { width: 24px; height: 2px; background: rgb(255 255 255 / .28); }
+.offer-steps i.is-on { background: #fff; }
 .offer-text { max-width: 980px; display: flex; flex-direction: column; gap: 20px; color: #fff; }
 .offer h3 { font-size: clamp(56px, 7.4vw, 112px); line-height: .95; letter-spacing: -.01em; }
 .offer-pre { display: block; margin-bottom: .2em; font-size: .42em; font-weight: 500; line-height: 1; color: var(--color-neutral-300); }
@@ -675,6 +679,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .dark + .credentials { padding-top: 72px; }
   .dark .label { border-top-color: var(--navy-700) !important; }
   .offer-inner { padding-top: 24px; padding-bottom: 40px; }
+  .offer-steps { top: 24px; }
   .offer-text { gap: 14px; }
   .dark .offer-line { font-size: 19px; line-height: 1.35; }
   .dark .offer-para { padding-top: 14px; font-size: 16px; }
