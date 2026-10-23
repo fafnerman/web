@@ -575,28 +575,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .offer .duotone img { filter: grayscale(1) contrast(1.05) brightness(.6); }
 .offer-media::after { content: ""; position: absolute; inset: 0; background: rgb(16 42 67 / .35); }
 .offer-inner { position: relative; z-index: 1; height: 100%; padding-top: 40px; padding-bottom: 72px; display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
-/* One vertical indicator for the three panels. It lives on a rail running
-   from the middle of the first panel to the middle of the last, so it rides
-   in with the first panel, holds mid-screen at the right edge while the
-   panels pass, and leaves with the last; a white marker slides to the panel
-   in view. The rail is absolutely placed and takes no space. */
-.offer-rail {
-  --seg: 20px; --gap: 6px; --track: calc(var(--seg) * 3 + var(--gap) * 2);
-  position: absolute; z-index: 3; right: var(--gutter); width: 2px; pointer-events: none;
-  top: calc(var(--offer-h) / 2 - var(--track) / 2);
-  bottom: calc(var(--offer-h) / 2 - var(--track) / 2);
-}
-.offer-steps {
-  position: sticky; height: var(--track);
-  top: calc(var(--header-h) + (100svh - var(--header-h) - var(--track)) / 2);
-  display: flex; flex-direction: column; gap: var(--gap);
-}
-.offer-steps i { flex: none; height: var(--seg); background: rgb(255 255 255 / .28); }
-.offer-steps b {
-  position: absolute; left: 0; top: 0; width: 2px; height: var(--seg); background: #fff;
-  transform: translateY(calc(var(--step, 0) * (var(--seg) + var(--gap))));
-  transition: transform .6s var(--ease-out);
-}
 .offer-text { max-width: 980px; display: flex; flex-direction: column; gap: 20px; color: #fff; }
 .offer h3 { font-size: clamp(56px, 7.4vw, 112px); line-height: .95; letter-spacing: -.01em; }
 .offer-pre { display: block; margin-bottom: .2em; font-size: .42em; font-weight: 500; line-height: 1; color: var(--color-neutral-300); }
@@ -699,7 +677,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .dark + .credentials { padding-top: 72px; }
   .dark .label { border-top-color: var(--navy-700) !important; }
   .offer-inner { padding-top: 24px; padding-bottom: 40px; }
-  .offer-rail { right: 8px; }
   .offer-text { gap: 14px; }
   .dark .offer-line { font-size: 19px; line-height: 1.35; }
   .dark .offer-para { padding-top: 14px; font-size: 16px; }
