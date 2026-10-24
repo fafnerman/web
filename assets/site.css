@@ -479,9 +479,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* Mission: white ground, statement and an outline drawing of the rocket */
 /* A full screen of its own: statement at the top, drawing directly beneath it */
 .mission { padding-top: 144px; padding-bottom: 40px; align-items: start; align-content: start; row-gap: 64px; background: #fff; }
-.mission .label { padding-top: 12px; color: var(--color-neutral-600); }
-.mission-statement { grid-column: 3 / span 10; margin: 0; font: 600 clamp(44px, 5.6vw, 84px)/.96 var(--font-heading); letter-spacing: -.01em; text-wrap: pretty; }
-.mission-statement .dim { color: var(--color-neutral-400); }
+.mission-statement { grid-column: 1 / span 10; margin: 0; font: 600 clamp(44px, 5.6vw, 84px)/.96 var(--font-heading); letter-spacing: -.01em; text-wrap: pretty; }
 .mission-drawing {
   grid-column: 1 / -1;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 90%, transparent 100%);
@@ -639,7 +637,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .dark + .credentials .sec-rule { display: none; }
 
 @media (max-width: 1099px) {
-  .mission .label, .problem .label, .technology .label, .credentials .label { grid-column: 1 / -1; margin-bottom: 24px; padding-top: 0; }
+  .problem .label, .technology .label, .credentials .label { grid-column: 1 / -1; margin-bottom: 24px; padding-top: 0; }
   .mission-statement { grid-column: 1 / -1; }
   .problem-lede, .technology .h2, .credentials .h2 { grid-column: 1 / -1; }
   .contact h2 { grid-column: 1 / -1; }
@@ -655,7 +653,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .home-hero .hero-cta .btn { display: flex; width: 100%; padding: 16px 20px; font-size: 14px; }
 
   .mission { display: flex; flex-direction: column; row-gap: 0; padding-top: 96px; padding-bottom: 24px; }
-  .mission .label { margin-bottom: 24px; font-size: 11px; }
   .mission-statement { font-size: clamp(32px, 9.5vw, 40px); line-height: 1.02; }
   .mission-drawing { width: calc(100% + var(--gutter) * 2); margin: 0 calc(var(--gutter) * -1); padding-top: 40px; }
   .mission-drawing text { display: none; }  /* too small to read at phone width */
