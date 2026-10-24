@@ -583,15 +583,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .dark .offer-line { max-width: 720px; margin: 0; font: 500 clamp(22px, 2vw, 30px)/1.3 var(--font-body); color: #fff; }
 .dark .offer-para { max-width: 640px; margin: 0; padding-top: 20px; border-top: 1px solid rgb(255 255 255 / .25); font-size: clamp(16px, 1.35vw, 20px); line-height: 1.55; color: var(--color-neutral-300); }
 
-/* Credentials: heading in the lead style, then three white boxes sized to
-   their text (hairline border, corner marks inside). The boxes share rows,
+/* Credentials: heading in the lead style, then three blue boxes (the careers
+   cards' shades) sized to their text, corner marks inside. The boxes share rows,
    so titles line up and paragraphs start level. */
 .credentials { padding-bottom: 144px; }
 .credentials .h2 { grid-column: 1 / span 8; margin: 0 0 48px; font: 500 clamp(26px, 2.5vw, 36px)/1.12 var(--font-heading); letter-spacing: 0; text-wrap: balance; }
 
 .cred-cards { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto; column-gap: 16px; row-gap: 0; margin: 0; padding: 0; list-style: none; }
-.cred-card { position: relative; grid-row: span 2; display: grid; grid-template-rows: subgrid; padding: 36px 32px 34px; background: #fff; border: 1px solid var(--color-neutral-400); color: var(--color-text); }
-.cred-card .mark { position: absolute; width: 11px; height: 11px; color: color-mix(in srgb, var(--color-text) 55%, transparent); }
+.cred-card { position: relative; grid-row: span 2; display: grid; grid-template-rows: subgrid; padding: 36px 32px 34px; background: var(--color-accent-900); color: #fff; }
+.cred-card:nth-child(2) { background: var(--color-accent-700); }   /* same three blues as the careers cards */
+.cred-card:nth-child(3) { background: var(--color-accent-800); }
+.cred-card .mark { position: absolute; width: 11px; height: 11px; color: rgb(255 255 255 / .7); }
 .cred-card .mark::before, .cred-card .mark::after { content: ""; position: absolute; background: currentColor; }
 .cred-card .mark::before { left: 5px; top: 0; width: 1px; height: 100%; }
 .cred-card .mark::after { top: 5px; left: 0; width: 100%; height: 1px; }
@@ -600,7 +602,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .cred-card .mark.bl { left: 12px; bottom: 12px; }
 .cred-card .mark.br { right: 12px; bottom: 12px; }
 .cred-card h3 { grid-row: 1; margin: 0 0 10px; font-size: 26px; line-height: 1; }
-.cred-card p { grid-row: 2; margin: 0; font-size: 16px; line-height: 1.55; }
+.cred-card p { grid-row: 2; margin: 0; font-size: 16px; line-height: 1.55; color: rgb(255 255 255 / .88); }
 
 /* Contact */
 .contact { background: var(--navy); color: #fff; padding-top: 144px; padding-bottom: 48px; }
