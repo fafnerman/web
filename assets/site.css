@@ -751,10 +751,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .home-hero h1 { font-size: clamp(36px, 7vw, 64px); }
 }
 
-/* Phones and portrait screens: no pinned scrolling. The hero and the three
-   product panels are stacked in order, each capped in height so a tall
-   screen shows the next one instead of stretching the photo. */
-@media (max-width: 767px), (orientation: portrait) {
+/* Tall portrait screens (tablets upright, vertical monitors): no pinned
+   scrolling. The hero and the three product panels are stacked in order, each
+   capped in height so the screen shows the next one instead of stretching the
+   photo. Phones keep the full-screen hero and pinned panels. */
+@media (min-width: 768px) and (orientation: portrait) {
   .home-hero { position: relative; height: min(100svh, max(560px, 80vw)); }
   .offers { --offer-h: min(calc(100svh - var(--header-h)), max(520px, 62.5vw)); }
   .offer { position: relative; top: auto; height: var(--offer-h); }
