@@ -563,6 +563,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   --offer-h: max(480px, calc(100svh - var(--header-h)));
   position: relative; grid-column: 1 / -1; margin: 0 calc(var(--gutter) * -1);
 }
+/* Phones: size the pinned panels to the screen with the address bar hidden
+   (lvh), so no background shows below them when the bar slides away; --bar
+   (the bar's height) pads the text so it stays clear of the bar when shown. */
+@supports (height: 100lvh) {
+  .offers { --offer-h: max(480px, calc(100lvh - var(--header-h))); --bar: calc(100lvh - 100svh); }
+}
 .offer {
   position: sticky; top: var(--header-h);
   height: max(480px, calc(100vh - var(--header-h))); height: var(--offer-h); overflow: hidden; background: var(--color-accent-900);
@@ -576,7 +582,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .offer-media .frame { background: var(--color-accent-900); }
 .offer .duotone img { filter: grayscale(1) contrast(1.05) brightness(.6); }
 .offer-media::after { content: ""; position: absolute; inset: 0; background: rgb(16 42 67 / .35); }
-.offer-inner { position: relative; z-index: 1; height: 100%; padding-top: 40px; padding-bottom: 72px; display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
+.offer-inner { position: relative; z-index: 1; height: 100%; padding-top: 40px; padding-bottom: calc(72px + var(--bar, 0px)); display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; }
 .offer-text { max-width: 980px; display: flex; flex-direction: column; gap: 20px; color: #fff; }
 .offer h3 { font-size: clamp(56px, 7.4vw, 112px); line-height: .95; letter-spacing: -.01em; }
 .offer-pre { display: block; margin-bottom: .2em; font-size: .42em; font-weight: 500; line-height: 1; color: var(--color-neutral-300); }
@@ -677,7 +683,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
   .dark + .credentials { padding-top: 72px; }
   .dark .label { border-top-color: var(--navy-700) !important; }
-  .offer-inner { padding-top: 24px; padding-bottom: 40px; }
+  .offer-inner { padding-top: 24px; padding-bottom: calc(40px + var(--bar, 0px)); }
   .offer-text { gap: 14px; }
   .dark .offer-line { font-size: 19px; line-height: 1.35; }
   .dark .offer-para { padding-top: 14px; font-size: 16px; }
@@ -757,7 +763,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    photo. Phones keep the full-screen hero and pinned panels. */
 @media (min-width: 768px) and (orientation: portrait) {
   .home-hero { position: relative; height: min(100svh, max(560px, 80vw)); }
-  .offers { --offer-h: min(calc(100svh - var(--header-h)), max(520px, 62.5vw)); }
+  .offers { --offer-h: min(calc(100svh - var(--header-h)), max(520px, 62.5vw)); --bar: 0px; }
   .offer { position: relative; top: auto; height: var(--offer-h); }
   #uav-systems, #advanced-guidance { margin-top: 0; }
 }
