@@ -588,8 +588,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .dark .offer-line { max-width: 720px; margin: 0; font: 500 clamp(22px, 2vw, 30px)/1.3 var(--font-body); color: #fff; }
 .dark .offer-para { max-width: 640px; margin: 0; padding-top: 20px; border-top: 1px solid rgb(255 255 255 / .25); font-size: clamp(16px, 1.35vw, 20px); line-height: 1.55; color: var(--color-neutral-300); }
 
-/* Credentials: three columns split by hairlines. Kept simple: a bold title,
-   the detail, and who issued it at the foot; two text sizes, one colour. */
+/* Credentials: three columns split by hairlines. Kept simple: a bold title
+   and one short paragraph; two text sizes, one colour. */
 .credentials { padding-bottom: 144px; }
 .credentials .h2 { grid-column: 1 / span 8; margin: 0 0 48px; font: 500 clamp(26px, 2.5vw, 36px)/1.12 var(--font-heading); letter-spacing: 0; text-wrap: balance; }
 .creds { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-neutral-300); }
@@ -597,8 +597,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .cred:first-child { padding-left: 0; border-left: 0; }
 .cred:last-child { padding-right: 0; }
 .cred-k { margin: 0; font: 600 22px/1.25 var(--font-body); letter-spacing: 0; }
-.cred-d { margin: 0; max-width: 34ch; }
-.cred-a { margin: auto 0 0; padding-top: 20px; }
+.cred-d { margin: 0; max-width: 38ch; }
 
 /* Contact */
 .contact { background: var(--navy); color: #fff; padding-top: 144px; padding-bottom: 48px; }
@@ -684,7 +683,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .cred { gap: 8px; padding: 24px 0; border-left: 0; border-top: 1px solid var(--color-neutral-300); font-size: 16px; }
   .cred:first-child { border-top: 0; }
   .cred-k { font-size: 20px; }
-  .cred-a { padding-top: 8px; }
 
   .contact { padding-top: 72px; padding-bottom: 32px; display: flex; flex-direction: column; }
   .contact h2 { font-size: 56px; }
