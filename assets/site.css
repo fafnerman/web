@@ -588,22 +588,16 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .dark .offer-line { max-width: 720px; margin: 0; font: 500 clamp(22px, 2vw, 30px)/1.3 var(--font-body); color: #fff; }
 .dark .offer-para { max-width: 640px; margin: 0; padding-top: 20px; border-top: 1px solid rgb(255 255 255 / .25); font-size: clamp(16px, 1.35vw, 20px); line-height: 1.55; color: var(--color-neutral-300); }
 
-/* Credentials */
-.credentials { padding-bottom: 160px; }
-.credentials .h2 { grid-column: 1 / -1; margin-bottom: 72px; text-align: center; text-wrap: balance; }
-/* Three entries side by side, split by hairlines: big condensed title,
-   detail, and the issuing authority set like a document reference. */
-.creds { grid-column: 2 / span 10; display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-text); border-bottom: 1px solid var(--color-neutral-400); }
-.cred { display: flex; flex-direction: column; gap: 20px; min-width: 0; padding: 40px 40px 36px; border-left: 1px solid var(--color-neutral-400); }
-.cred:first-child { padding-left: 0; border-left: 0; }
-.cred:last-child { padding-right: 0; }
-.cred-k { font: 600 clamp(32px, 3.05vw, 44px)/1 var(--font-heading); letter-spacing: -.005em; text-wrap: balance; }
-.cred-d { margin: 0; max-width: 34ch; font-size: 16px; line-height: 1.55; color: var(--color-neutral-700); }
-.cred-a {
-  margin: auto 0 0; padding-top: 16px;
-  font: 600 11px/1.6 var(--font-body); letter-spacing: .14em; text-transform: uppercase; color: var(--color-text);
-}
-.cred-date { display: block; font-weight: 500; color: var(--color-accent-700); }
+/* Credentials: a plain register. Heading in the same style as the problem
+   lead; then one row per credential (what it is, what it means, who issued
+   it), all at one size and one colour, only the first column bold. */
+.credentials { padding-bottom: 144px; }
+.credentials .h2 { grid-column: 1 / span 8; margin: 0 0 48px; font: 500 clamp(26px, 2.5vw, 36px)/1.12 var(--font-heading); letter-spacing: 0; text-wrap: balance; }
+.creds { grid-column: 1 / -1; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-text); }
+.cred { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gap); padding: 22px 0; border-bottom: 1px solid var(--color-neutral-300); font-size: 17px; line-height: 1.5; color: var(--color-text); }
+.cred-k { grid-column: 1 / span 4; margin: 0; font: 600 17px/1.5 var(--font-body); letter-spacing: 0; }
+.cred-d { grid-column: 5 / span 4; margin: 0; }
+.cred-a { grid-column: 9 / span 4; margin: 0; }
 
 /* Contact */
 .contact { background: var(--navy); color: #fff; padding-top: 144px; padding-bottom: 48px; }
@@ -649,10 +643,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .mission .label, .problem .label, .technology .label, .credentials .label { grid-column: 1 / -1; margin-bottom: 24px; padding-top: 0; }
   .mission-statement { grid-column: 1 / -1; }
   .problem-lede, .technology .h2, .credentials .h2 { grid-column: 1 / -1; }
-  .creds { grid-column: 1 / -1; grid-template-columns: 1fr; }
-  .cred { padding: 32px 0; border-left: 0; border-top: 1px solid var(--color-neutral-400); }
-  .cred:first-child { border-top: 0; }
-  .cred-d { max-width: 60ch; }
   .contact h2 { grid-column: 1 / -1; }
   .contact-intro { grid-column: 1 / span 8; }
 }
@@ -688,10 +678,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .dark .offer-line { font-size: 19px; line-height: 1.35; }
   .dark .offer-para { padding-top: 14px; font-size: 16px; }
 
-  .credentials .h2 { margin: 20px 0 32px; font-size: 36px; }
-  .cred { gap: 14px; padding: 24px 0; }
-  .cred-k { font-size: 30px; }
-  .cred-d { font-size: 15px; }
+  .credentials .h2 { margin: 20px 0 28px; font-size: 24px; }
+  .cred { grid-template-columns: minmax(0, 1fr); row-gap: 2px; padding: 18px 0; font-size: 16px; }
+  .cred-k, .cred-d, .cred-a { grid-column: 1 / -1; }
+  .cred-k { font-size: 16px; }
 
   .contact { padding-top: 72px; padding-bottom: 32px; display: flex; flex-direction: column; }
   .contact h2 { font-size: 56px; }
@@ -735,7 +725,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .role-page h1 { font-size: clamp(34px, 11vw, 44px); }
   .contact h2 { font-size: clamp(44px, 14.5vw, 56px); }
   .email-link, .contact .email-link { font-size: clamp(22px, 7vw, 28px); overflow-wrap: anywhere; }
-  .technology .h2, .credentials .h2 { font-size: clamp(30px, 9.5vw, 36px); }
+  .technology .h2 { font-size: clamp(30px, 9.5vw, 36px); }
   .offer h3 { font-size: clamp(42px, 13.5vw, 60px); }
 
   .home-hero-content { bottom: calc(env(safe-area-inset-bottom) + 32px); }
