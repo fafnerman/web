@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600&display=swap">
-  <link rel="stylesheet" href="assets/site.css?v=202610240902">
+  <link rel="stylesheet" href="assets/site.css?v=202610241014">
   <link rel="preload" as="image" href="images/image-1.jpg">
 </head>
 <body>
@@ -157,7 +157,7 @@
 
             <!-- forward launcher, close to the front: hit and struck through -->
             <g data-cr="a" transform="translate(230 -56)" style="opacity:0">
-              <g style="stroke:var(--color-neutral-700)" stroke-width="1">
+              <g style="stroke:var(--ra-miss)" stroke-width="1">
                 <path d="M3 120 H40 M3 117 H30 V120 M3 117 V120"></path>
                 <path d="M30 120 V112 H35.5 L40 116.5 V120"></path>
                 <path d="M32 113.6 H35 L37.4 116 H32 Z" stroke-width=".8"></path>
@@ -177,7 +177,7 @@
 
             <!-- launcher far back on the left: never hit -->
             <g data-cr="b" transform="translate(0 -56)">
-              <g style="stroke:var(--color-neutral-700)" stroke-width="1">
+              <g style="stroke:var(--prob-stroke)" stroke-width="1">
                 <path d="M3 120 H40 M3 117 H30 V120 M3 117 V120"></path>
                 <path d="M30 120 V112 H35.5 L40 116.5 V120"></path>
                 <path d="M32 113.6 H35 L37.4 116 H32 Z" stroke-width=".8"></path>
@@ -211,11 +211,31 @@
           <div class="prob-inner">
             <div class="prob-head"><span class="prob-sign" aria-hidden="true">+</span></div>
             <div class="prob-fig" aria-hidden="true">
-            <svg viewBox="0 0 420 150" width="100%" height="150" fill="none" preserveAspectRatio="xMinYMid meet" style="display:block;overflow:visible">
-            
-            <g style="font:500 9px var(--font-body);letter-spacing:.14em"><text x="0" y="12" style="fill:var(--color-neutral-600)">ROCKETS PER EFFECT · UNGUIDED</text><text x="0" y="96" style="fill:var(--prob-stroke)">GUIDED</text></g>
-            <path d="M10 24 L14 30 V52 L16 58 H4 L6 52 V30 Z M30 24 L34 30 V52 L36 58 H24 L26 52 V30 Z M50 24 L54 30 V52 L56 58 H44 L46 52 V30 Z M70 24 L74 30 V52 L76 58 H64 L66 52 V30 Z M90 24 L94 30 V52 L96 58 H84 L86 52 V30 Z M110 24 L114 30 V52 L116 58 H104 L106 52 V30 Z M130 24 L134 30 V52 L136 58 H124 L126 52 V30 Z M150 24 L154 30 V52 L156 58 H144 L146 52 V30 Z M170 24 L174 30 V52 L176 58 H164 L166 52 V30 Z M190 24 L194 30 V52 L196 58 H184 L186 52 V30 Z M210 24 L214 30 V52 L216 58 H204 L206 52 V30 Z M230 24 L234 30 V52 L236 58 H224 L226 52 V30 Z M250 24 L254 30 V52 L256 58 H244 L246 52 V30 Z M270 24 L274 30 V52 L276 58 H264 L266 52 V30 Z M290 24 L294 30 V52 L296 58 H284 L286 52 V30 Z M310 24 L314 30 V52 L316 58 H304 L306 52 V30 Z M330 24 L334 30 V52 L336 58 H324 L326 52 V30 Z M350 24 L354 30 V52 L356 58 H344 L346 52 V30 Z M370 24 L374 30 V52 L376 58 H364 L366 52 V30 Z M390 24 L394 30 V52 L396 58 H384 L386 52 V30 Z" style="stroke:var(--color-neutral-500)" stroke-width="1.4"></path>
-            <path d="M10 106 L14 112 V134 L16 140 H4 L6 134 V112 Z M30 106 L34 112 V134 L36 140 H24 L26 134 V112 Z" style="stroke:var(--prob-stroke)" stroke-width="1.4"></path>
+            <svg data-supply-anim viewBox="0 0 420 160" width="100%" height="160" fill="none" preserveAspectRatio="xMinYMid meet" style="display:block;overflow:visible">
+              <!-- 9M22S-style rockets per effect: 20 unguided (red) over 2 guided with the kit's wings (blue) -->
+              <g style="font:500 9px var(--font-body);letter-spacing:.14em"><text data-sp-label="miss" x="0" y="12" style="fill:var(--color-neutral-600)">ROCKETS PER EFFECT · UNGUIDED</text><text data-sp-label="hit" x="0" y="94" style="fill:var(--prob-stroke)">GUIDED</text></g>
+              <g class="rk rk-miss" transform="translate(10 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(30 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(50 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(70 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(90 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(110 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(130 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(150 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(170 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(190 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(210 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(230 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(250 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(270 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(290 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(310 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(330 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(350 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(370 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-miss" transform="translate(390 20) scale(.78)"><g data-sp-rocket="miss"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path></g></g>
+              <g class="rk rk-hit" transform="translate(18 102) scale(.78)"><g data-sp-rocket="hit"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path><path class="wing" d="M2.6 34 H17 V36.6 H2.6"></path><path class="wing" d="M-2.6 34 H-17 V36.6 H-2.6"></path></g></g>
+              <g class="rk rk-hit" transform="translate(58 102) scale(.78)"><g data-sp-rocket="hit"><path d="M-0.7 3 L0 0 L0.7 3 Q2.6 7 2.6 15 V60 L5.2 67.5 V72 L2.3 70 V71 H-2.3 V70 L-5.2 72 V67.5 L-2.6 60 V15 Q-2.6 7 -0.7 3 Z"></path><path d="M-2.6 15 H2.6 M-2.6 27 H2.6 M-2.6 58 H2.6" fill="none"></path><path class="wing" d="M2.6 34 H17 V36.6 H2.6"></path><path class="wing" d="M-2.6 34 H-17 V36.6 H-2.6"></path></g></g>
             </svg>
             </div>
             <div class="prob-text">
@@ -307,6 +327,6 @@
     </div>
   </footer>
 
-  <script src="assets/site.js?v=202610240902"></script>
+  <script src="assets/site.js?v=202610241014"></script>
 </body>
 </html>

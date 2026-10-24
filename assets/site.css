@@ -518,6 +518,11 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .prob-fig svg * { vector-effect: non-scaling-stroke; transition: stroke .4s ease, fill .4s ease; }
 /* Range animation impact dots: misses muted red, guided hits muted green */
 .prob-fig svg { --ra-miss: #b4544c; --ra-hit: #4f8a5f; }
+/* Supply drawing: 9M22S-style rockets, unguided outlined red, guided in the box's stroke colour */
+.prob-fig .rk { fill: #fff; stroke-width: 1; stroke-linejoin: round; }
+.prob-fig .rk-miss { stroke: var(--ra-miss); }
+.prob-fig .rk-hit { stroke: var(--prob-stroke); stroke-width: 1.3; }
+.prob-fig .wing { transform-box: fill-box; }
 .prob-text { margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 12px; }
 .prob h3 { font-size: 36px; line-height: 1; text-wrap: balance; }
 .prob-toggle { text-align: left; cursor: pointer; }

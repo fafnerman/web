@@ -529,9 +529,55 @@
     };
   }
 
+  /* ── Supply animation ────────────────────────────────────────────
+     The unguided salvo (red) stands up rocket by rocket, then the two
+     guided rockets rise and their wings unfold. Plays once and ends on the
+     static drawing; finish() jumps straight there. */
+  function supplyAnimation(svg) {
+    var reduce = reduceMotion;
+    var lblMiss = svg.querySelector('[data-sp-label="miss"]');
+    var lblHit = svg.querySelector('[data-sp-label="hit"]');
+    var miss = Array.prototype.slice.call(svg.querySelectorAll('[data-sp-rocket="miss"]'));
+    var hit = Array.prototype.slice.call(svg.querySelectorAll('[data-sp-rocket="hit"]'));
+    var EASE = 'cubic-bezier(.16,.84,.24,1)';
+    var running = [], last = null;
+    function anim(node, frames, delay, dur) {
+      var a = node.animate(frames, { duration: dur, delay: delay, easing: EASE, fill: 'backwards' });
+      running.push(a);
+      if (!last || delay + dur > last.end) last = { a: a, end: delay + dur };
+    }
+    function finish() {
+      running.forEach(function (a) { a.cancel(); });
+      running = []; last = null;
+    }
+    return {
+      play: function () {
+        finish();
+        if (reduce.matches || !Element.prototype.animate) return;   // static drawing
+        var rise = [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }];
+        anim(lblMiss, [{ opacity: 0 }, { opacity: 1 }], 0, 500);
+        miss.forEach(function (r, i) { anim(r, rise, 300 + i * 60, 420); });
+        var t = 300 + (miss.length - 1) * 60 + 600;
+        anim(lblHit, [{ opacity: 0 }, { opacity: 1 }], t, 500);
+        hit.forEach(function (r, i) {
+          anim(r, rise, t + 250 + i * 140, 520);
+          // wings unfold from the body
+          Array.prototype.forEach.call(r.querySelectorAll('.wing'), function (w, k) {
+            w.style.transformOrigin = k === 0 ? 'left top' : 'right top';
+            anim(w, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], t + 850 + i * 140, 520);
+          });
+        });
+        if (last) last.a.onfinish = function () { running = []; last = null; };
+      },
+      finish: finish,
+      get playing() { return running.length > 0; }
+    };
+  }
+
   /* ── Box drawings: animate only the open box, while it is on screen ──
-     Each plays once every time its box opens (or comes back on screen
-     open). A box that is closed or off screen shows its static drawing. */
+     Range, Crew and Supply each play once (never loop) every time their box
+     opens or comes back on screen open. A box that is closed or off screen
+     shows its static drawing. */
   function setupFigAnims() {
     if (!('IntersectionObserver' in window) || !('MutationObserver' in window)) return;
     var items = [];
@@ -539,6 +585,8 @@
     if (range) items.push({ svg: range, anim: rangeAnimation(range) });
     var crew = document.querySelector('[data-crew-anim]');
     if (crew) items.push({ svg: crew, anim: crewAnimation(crew) });
+    var supply = document.querySelector('[data-supply-anim]');
+    if (supply) items.push({ svg: supply, anim: supplyAnimation(supply) });
     items.forEach(function (it) {
       var box = it.svg.closest('.prob'), inView = false, active = false;
       function update() {
