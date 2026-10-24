@@ -524,9 +524,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .prob-text { margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 12px; }
 .prob h3 { font-size: 36px; line-height: 1; text-wrap: balance; }
 .prob-toggle { text-align: left; cursor: pointer; }
-.prob-line, .prob-more p { margin: 0; max-width: 360px; font-size: 15px; line-height: 1.5; color: var(--color-neutral-700); }
-.prob-more { max-width: 440px; padding-top: 16px; border-top: 1px solid var(--color-neutral-300); }
-.prob-more p { max-width: none; line-height: 1.55; }
+.prob-more { max-width: 440px; }
+.prob-more p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--color-text); }
 /* open state (only once JS runs) */
 .js .prob { cursor: pointer; }
 .js .prob-sign { display: block; }
@@ -535,16 +534,15 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* the extra paragraph folds open and fades in instead of popping */
 .js .prob .prob-more {
   display: grid; grid-template-rows: 0fr; opacity: 0; overflow: hidden;
-  margin-top: -12px; padding-top: 0; border-top-color: transparent;
-  transition: grid-template-rows .6s var(--prob-ease), margin-top .6s var(--prob-ease),
-              padding-top .6s var(--prob-ease), opacity .2s ease, border-top-color .2s ease;
+  margin-top: -12px;
+  transition: grid-template-rows .6s var(--prob-ease), margin-top .6s var(--prob-ease), opacity .2s ease;
 }
 /* Side by side, the text keeps a fixed width while the blocks resize, so it
-   never rewraps mid-animation: titles and lines at the closed width, the
-   extra paragraph at the open width (clipped while its block closes). */
+   never rewraps mid-animation: titles at the closed width, the paragraph
+   at the open width (clipped while its block closes). */
 @media (min-width: 768px) {
   .probs { container-type: inline-size; }
-  .prob h3, .prob-line { width: calc((100cqw - 32px) / 4 - 58px); max-width: none; flex: none; }
+  .prob h3 { width: calc((100cqw - 32px) / 4 - 58px); max-width: none; flex: none; }
   /* sized so the longest words ("survivability", "conservation") fits a closed block */
   .prob h3 { font-size: clamp(16px, calc(((100cqw - 32px) / 4 - 58px) / 6.6), 36px); }
   .js .prob .prob-more p { width: min(440px, calc((100cqw - 32px) / 2 - 58px)); }
@@ -552,9 +550,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .js .prob .prob-more p { min-height: 0; overflow: hidden; }
 .js .prob.is-open .prob-more {
   grid-template-rows: 1fr; opacity: 1;
-  margin-top: 0; padding-top: 16px; border-top-color: var(--color-neutral-300);
-  transition: grid-template-rows .6s var(--prob-ease), margin-top .6s var(--prob-ease),
-              padding-top .6s var(--prob-ease), opacity .4s ease .2s, border-top-color .4s ease .2s;
+  margin-top: 0;
+  transition: grid-template-rows .6s var(--prob-ease), margin-top .6s var(--prob-ease), opacity .4s ease .2s;
 }
 
 /* Technology */
